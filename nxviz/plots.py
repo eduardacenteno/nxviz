@@ -75,6 +75,9 @@ class BasePlot(object):
     :param node_color: The node attribute on which to specify the colour of nodes.
     :type node_color: `dict_key` (often `str`)
 
+    :param node_cmap: Name of matplotlib colormap used to color nodes (only used if node_color is not `None`).
+    :type node_cmap: `str`
+
     :param node_labels: Boolean, whether to use node objects as labels or not.
     :type node_labels: `bool`
 
@@ -108,6 +111,7 @@ class BasePlot(object):
         node_grouping=None,
         group_order="alphabetically",
         node_color=None,
+        node_cmap=None,
         node_labels=None,
         edge_width=None,
         edge_color=None,
@@ -142,6 +146,7 @@ class BasePlot(object):
 
         # Set node colors
         self.node_color = node_color
+        self.node_cmap = node_cmap
         self.sm = (
             None
         )  # sm -> for scalarmappable. See https://stackoverflow.com/questions/8342549/matplotlib-add-colorbar-to-a-sequence-of-line-plots  # noqa
@@ -270,17 +275,23 @@ class BasePlot(object):
         dtype = infer_data_type(data)
         n_grps = num_discrete_groups(data)
 
-        if dtype == "categorical" or dtype == "ordinal":
-            if n_grps <= 8:
-                cmap = get_cmap(
-                    cmaps["Accent_{0}".format(n_grps)].mpl_colormap
-                )
-            else:
-                cmap = n_group_colorpallet(n_grps)
-        elif dtype == "continuous" and not is_data_diverging(data):
-            cmap = get_cmap(cmaps["continuous"].mpl_colormap)
-        elif dtype == "continuous" and is_data_diverging(data):
-            cmap = get_cmap(cmaps["diverging"].mpl_colormap)
+        if self.node_cmap:
+            if dtype == "categorical" or dtype == "ordinal":
+                cmap = get_cmap(self.node_cmap, n_grps)
+            elif dtype == "continuous":
+                cmap = get_cmap(self.node_cmap)
+        else:
+            if dtype == "categorical" or dtype == "ordinal":
+                if n_grps <= 8:
+                    cmap = get_cmap(
+                        cmaps["Accent_{0}".format(n_grps)].mpl_colormap
+                    )
+                else:
+                    cmap = n_group_colorpallet(n_grps)
+            elif dtype == "continuous" and not is_data_diverging(data):
+                cmap = get_cmap(cmaps["continuous"].mpl_colormap)
+            elif dtype == "continuous" and is_data_diverging(data):
+                cmap = get_cmap(cmaps["diverging"].mpl_colormap)
 
         for d in data:
             idx = data_reduced.index(d) / n_grps
