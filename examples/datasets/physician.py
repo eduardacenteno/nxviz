@@ -34,8 +34,8 @@ G = load_physicians_network()
 ccs = nx.connected_component_subgraphs(G)
 for i, g in enumerate(ccs):
     for n in g.nodes():
-        G.node[n]["group"] = i
-        G.node[n]["connectivity"] = G.degree(n)
+        G.nodes[n]["group"] = i
+        G.nodes[n]["connectivity"] = G.degree(n)
 m = CircosPlot(
     G, node_color="group", node_grouping="group", node_order="connectivity"
 )

@@ -45,7 +45,7 @@ def load_crime_network():
     gender.index += 1
     for n, gender_code in gender.iterrows():
         nodeid = "p{0}".format(n)
-        G.node[nodeid]["gender"] = gender_code[0]
+        G.nodes[nodeid]["gender"] = gender_code[0]
 
     return G
 
@@ -55,7 +55,7 @@ G = load_crime_network()
 # Annotate each node with connectivity score
 for n in G.nodes():
     dcs = nx.degree_centrality(G)
-    G.node[n]["connectivity"] = dcs[n]
+    G.nodes[n]["connectivity"] = dcs[n]
 
 # Make a CircosPlot of the bipartite graph
 c = CircosPlot(
@@ -68,12 +68,12 @@ c.draw()
 
 
 # Make the "people" projection of the bipartite graph.
-person_nodes = [n for n in G.nodes() if G.node[n]["bipartite"] == "person"]
+person_nodes = [n for n in G.nodes() if G.nodes[n]["bipartite"] == "person"]
 pG = nx.bipartite.projection.projected_graph(G, person_nodes)
 
 for n in pG.nodes():
     dcs = nx.degree_centrality(pG)
-    pG.node[n]["connectivity"] = dcs[n]
+    pG.nodes[n]["connectivity"] = dcs[n]
 
 c = CircosPlot(
     pG, node_grouping="gender", node_order="connectivity", node_color="gender"

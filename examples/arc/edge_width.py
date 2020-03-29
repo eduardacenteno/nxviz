@@ -9,9 +9,9 @@ from nxviz.plots import ArcPlot
 G = nx.DiGraph()
 
 NODES_EBUNCH = [
-    ("A", {"n_visitors": "1"}),
-    ("B", {"n_visitors": "3"}),
-    ("C", {"n_visitors": "4"}),
+    ("A", {"n_visitors": 1}),
+    ("B", {"n_visitors": 3}),
+    ("C", {"n_visitors": 4}),
 ]
 
 G.add_nodes_from(NODES_EBUNCH)

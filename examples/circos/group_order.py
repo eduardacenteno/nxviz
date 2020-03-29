@@ -7,7 +7,7 @@ from nxviz.plots import CircosPlot
 
 G = nx.barbell_graph(m1=10, m2=3)
 for n, d in G.nodes(data=True):
-    G.node[n]["class"] = choice(["a", "b", "c", "d", "e"])
+    G.nodes[n]["class"] = choice(["a", "b", "c", "d", "e"])
 c = CircosPlot(
     G,
     node_grouping="class",

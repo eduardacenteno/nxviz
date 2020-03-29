@@ -193,8 +193,8 @@ def to_pandas_edges(G, x_kw, y_kw, **kwargs):  # noqa: N803
     # Add node data to dataframe.
     for i, (n1, n2, d) in enumerate(G.edges(data=True)):
         idx = i * 2
-        x = G.node[n1][x_kw]
-        y = G.node[n1][y_kw]
+        x = G.nodes[n1][x_kw]
+        y = G.nodes[n1][y_kw]
         data1 = dict(
             edge=i, source=n1, target=n2, pair=(n1, n2), x=x, y=y, **d
         )
